@@ -10,7 +10,7 @@ fi
 echo "Starte Root-spezifischen Teil mit sudo..."
 
 # Erstelle die Sudo-Konfigurationsdatei für die Gruppe wheel, falls nötig
-sudoers_file="/etc/sudoers.d/rootuser"
+sudoers_file="/etc/sudoers.d/rootusers"
 sudoers_entry="%wheel ALL=(ALL) NOPASSWD: ALL"
 
 if [ ! -f "$sudoers_file" ]; then
@@ -60,10 +60,12 @@ packages=(
   "neovim"
   "stow"
   "zsh"
+  "exa"
   "thunderbird"
   "thunderbird-i18n-de"
+  "gimp"
   "gnome-shell-extensions"
-  "gnome-canlendar"
+  "gnome-calendar"
   "gnome-contacts"
   "vlc"
   "kitty"
@@ -88,6 +90,54 @@ for package in "${packages[@]}"; do
     fi
   fi
 done
+
+# Installiere Oh My Zsh
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  echo "Installiere Oh My Zsh..."
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  echo "Oh My Zsh erfolgreich installiert."
+else
+  echo "Oh My Zsh ist bereits installiert. Überspringe Installation."
+fi
+
+# Installiere das Plugin zsh-autosuggestions
+if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
+  echo "Installiere zsh-autosuggestions Plugin..."
+  git clone https://github.com/zsh-users/zsh-autosuggestions "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+  echo "zsh-autosuggestions Plugin erfolgreich installiert."
+else
+  echo "zsh-autosuggestions ist bereits installiert. Überspringe Installation."
+fi
+
+# Installiere das Plugin zsh-syntax-highlighting
+if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
+  echo "Installiere zsh-syntax-highlighting Plugin..."
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+  echo "zsh-syntax-highlighting Plugin erfolgreich installiert."
+fi
+
+# Installiere das Plugin fast-syntax-highlighting
+if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/fast-syntax-highlighting" ]; then
+  echo "Installiere fast-syntax-highlighting Plugin..."
+  git clone https://github.com/zdharma-continuum/fast-syntax-highlighting "$HOME/.oh-my-zsh/custom/plugins/fast-syntax-highlighting"
+  echo "fast-syntax-highlighting Plugin erfolgreich installiert."
+fi
+
+# Setze Zsh als Standard-Shell für den Benutzer
+if [ "$SHELL" != "$(command -v zsh)" ]; then
+  echo "Setze Zsh als Standard-Shell..."
+  chsh -s "$(command -v zsh)"
+  echo "Zsh wurde als Standard-Shell festgelegt. Sie müssen sich neu anmelden, um die Änderung zu übernehmen."
+fi
+
+# Installiere Oh My Posh
+if ! command -v oh-my-posh &> /dev/null; then
+  echo "Installiere Oh My Posh..."
+  yay -S --noconfirm oh-my-posh-bin
+  echo "Oh My Posh erfolgreich installiert."
+else
+  echo "Oh My Posh ist bereits installiert. Überspringe Installation."
+fi
 
 echo "Fertig!"
 
