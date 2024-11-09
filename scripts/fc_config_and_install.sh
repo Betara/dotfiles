@@ -49,6 +49,7 @@ packages=(
   "stow"
   "zsh"
   "exa"
+  "fzf"
   "thunderbird"
   "thunderbird-i18n-de"
   "gimp"
@@ -127,8 +128,8 @@ fi
 # Installiere Oh My Posh
 if ! command -v oh-my-posh &> /dev/null; then
   echo "Installiere Oh My Posh..."
-  sudo dnf install -y https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64
-  sudo mv posh-linux-amd64 /usr/local/bin/oh-my-posh
+  sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
+  sudo chmod +x /usr/local/bin/oh-my-posh
   sudo chmod +x /usr/local/bin/oh-my-posh
   echo "Oh My Posh erfolgreich installiert."
 
