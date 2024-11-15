@@ -48,6 +48,17 @@ gpgcheck=1
 gpgkey=https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
 EOF
 
+# Hinzufügen von VSCode Repository
+echo "Füge das VSCode Repository hinzu..."
+sudo tee /etc/yum.repos.d/vscode.repo > /dev/null <<EOF
+[code]
+name=Visual Studio Code
+baseurl=https://packages.microsoft.com/yumrepos/vscode
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+EOF
+
 # Array mit den Paketnamen
 packages=(
   "vlc"
