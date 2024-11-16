@@ -61,6 +61,7 @@ EOF
 
 # Array mit den Paketnamen
 packages=(
+  "neovim"	
   "vlc"
   "kitty"
   "google-chrome-stable"
@@ -71,6 +72,7 @@ packages=(
   "fzf"
   "eza"
   "brave-browser"
+  "gimp"
 )
 
 # Paketquellen aktualisieren
