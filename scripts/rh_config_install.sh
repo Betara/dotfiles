@@ -131,6 +131,13 @@ else
   echo "zsh-autosuggestions Plugin ist bereits installiert."
 fi
 
+# Setze Zsh als Standard-Shell für den Benutzer
+if [ "$SHELL" != "$(command -v zsh)" ]; then
+  echo "Setze Zsh als Standard-Shell..."
+  chsh -s "$(command -v zsh)"
+  echo "Zsh wurde als Standard-Shell festgelegt. Sie müssen sich neu anmelden, um die Änderung zu übernehmen."
+fi
+
 # Prüfen und Installation von Oh My Posh
 echo "Überprüfe, ob Oh My Posh bereits unter /usr/bin/oh-my-posh installiert ist..."
 if [ ! -f "/usr/bin/oh-my-posh" ]; then
