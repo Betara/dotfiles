@@ -60,7 +60,7 @@ packages=(
   "neovim"
   "stow"
   "zsh"
-  "exa"
+  "eza"
   "thunderbird"
   "thunderbird-i18n-de"
   "gimp"
