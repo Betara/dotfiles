@@ -28,6 +28,23 @@ else
   fi
 fi
 
+echo "Installiere Basis-Pakete..."
+install_packages "${base_packages[@]}"
+
+case "$DE" in
+  gnome)
+    echo "Installiere GNOME-spezifische Pakete..."
+    install_packages "${gnome_packages[@]}"
+    ;;
+  kde)
+    echo "Installiere KDE-spezifische Pakete..."
+    install_packages "${kde_packages[@]}"
+    ;;
+  *)
+    echo "Keine unterstützte Desktop-Umgebung erkannt. Überspringe DE-spezifische Pakete."
+    ;;
+esac
+
 # Setze Git-Konfiguration für Username und E-Mail
 echo "Setze Git-Konfiguration..."
 git config --global user.name "Betara"
