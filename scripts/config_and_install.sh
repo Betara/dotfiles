@@ -54,42 +54,65 @@ else
   echo "yay ist bereits installiert. Überspringe Installation."
 fi
 
-# Definiere die Liste der zu installierenden Pakete
-packages=(
-  "tmux"
-  "neovim"
-  "stow"
-  "zsh"
-  "eza"
-  "thunderbird"
-  "thunderbird-i18n-de"
-  "gimp"
-  "gnome-shell-extensions"
-  "gnome-calendar"
-  "gnome-contacts"
-  "vlc"
-  "kitty"
-  "gnome-shell-extension-dash-to-dock"
-  "ttf-roboto-mono-nerd"
-  "ttf-roboto-mono"
-  "ttf-meslo-nerd"
+# Desktop-Umgebung erkennen
+DE="unknown"
+
+if [[ "$XDG_CURRENT_DESKTOP" =~ GNOME ]] || pacman -Qs gnome-shell > /dev/null; then
+  DE="gnome"
+elif [[ "$XDG_CURRENT_DESKTOP" =~ KDE ]] || pacman -Qs plasma-desktop > /dev/null; then
+  DE="kde"
+fi
+
+echo "Erkannte Desktop-Umgebung: $DE"
+
+# Pakete, die immer installiert werden
+base_packages=(
+  tmux
+  neovim
+  stow
+  zsh
+  eza
+  kitty
+  vlc
+  gimp
+  ttf-roboto-mono
+  ttf-roboto-mono-nerd
+  ttf-meslo-nerd
+    thunderbird
+  thunderbird-i18n-de
 )
 
-# Installiere die gewünschten Pakete, wenn sie noch nicht installiert sind
-echo "Installiere die gewünschten Pakete..."
-for package in "${packages[@]}"; do
-  package_name=$(basename "$package") # Extrahiere den Paketnamen
-  if pacman -Qs "$package_name" > /dev/null; then
-    echo "$package_name ist bereits installiert, überspringe Installation."
-  else
-    yay -S --noconfirm "$package"
-    if pacman -Qs "$package_name" > /dev/null; then
-      echo "$package_name erfolgreich installiert."
+# GNOME-spezifische Pakete
+gnome_packages=(
+  gnome-shell-extensions
+  gnome-calendar
+  gnome-contacts
+  gnome-shell-extension-dash-to-dock
+)
+
+# KDE-spezifische Pakete
+kde_packages=(
+  kvantum
+)
+
+install_packages() {
+  local pkg_list=("$@")
+
+  for package in "${pkg_list[@]}"; do
+    if pacman -Qi "$package" &> /dev/null; then
+      echo "$package ist bereits installiert, überspringe Installation."
     else
-      echo "Fehler bei der Installation von $package_name."
+      echo "Installiere $package..."
+      yay -S --noconfirm "$package"
+
+      if pacman -Qi "$package" &> /dev/null; then
+        echo "$package erfolgreich installiert."
+      else
+        echo "Fehler bei der Installation von $package."
+      fi
     fi
-  fi
-done
+  done
+}
 
 # Installiere Oh My Zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
